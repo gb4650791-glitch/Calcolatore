@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<style>
+    h1{
+        color: cadetBlue;
+    }
+    h2{
+        color: gold;
+    }
+    button{
+        margin:15px 15px 15px 0;
+        border-radius: 15px;
+        color: darkcyan;
+        background-color: gainSboro;
+        height: 50px;
+        width: 155px;
+        font-family: Times New Roman;
+        font-weight: 300;
+    }
+    body{
+        background-color: cornSilk;
+    }
+    input{
+        background-color: lavender;
+        height: 30px;
+        width: 300px;
+    }
+    p{
+        border: double aqua;
+        width: 300px;
+    }
+    #Circle{
+        width:200px;
+        height:200px;
+        border-radius: 50%;
+        background: steelblue;
+    }
+    #quadrato{
+        width: 200px;
+        height: 200px;
+        background: darkseagreen;
+    }
+    #rettangolo{
+        width: 300px;
+        height: 150px;
+        background: aqua;
+    }
+    #triangolo_isoscele{
+    width: 0;
+    height: 0;
+    border-left: 100px solid transparent;
+    border-right: 100px solid transparent;
+    border-bottom: 200px solid indianred;
+    }
+    #triangolo_rettangolo{
+        width: 0;
+        height: 0;
+        border-left: 0px solid;
+        border-right: 150px solid transparent;
+        border-bottom: 200px solid khaki;
+    }
+    #triangoloRettangoloIsoscele{
+        width: 0;
+        height: 0;
+        border-left: 0px solid;
+        border-right: 150px solid transparent;
+        border-bottom: 150px solid darkcyan;
+    }
+    #triangoloEquilatero{
+        width: 0;
+        height: 0;
+        border: 150px solid transparent;
+        border-bottom: 150px solid lime;
+        border-top: none;
+    }
+    .container{
+        display: grid;
+        grid-template-rows: auto;
+        grid-template-columns: auto auto auto auto auto auto;
+    }
+    ol{
+        list-style-type: none;
+    }
+    .in{
+        color: cornsilk;
+    }
+    li{
+        margin:5px;
+        color: darkseagreen;
+    }
+    .lp{
+        color: goldenrod;
+    }
+</style>
+<h1>Calcolatore di aree e perimetri</h1>
+<h2>Quale figura scegli?</h2>
+<input readonly="true" placeholder="Inserisci altezza" hidden type="number"><br>
+<span class='container'>
+<button onclick="console_figure('quadrato')" id="q">Quadrato</button>
+<button onclick="console_figure('rettangolo')" id="r">Rettangolo</button>
+<button onclick="console_figure('triangolo_isoscele')" id="ti">Triangolo isoscele</button>
+<button onclick="console_figure('triangolo_rettangolo')" id="tr">Triangolo rettangolo</button>
+<button onclick="console_figure('triangoloRettangoloIsoscele')" id="tri">Triangolo rettangolo isoscele</button>
+<button onclick="console_figure('triangoloEquilatero')" id="te">Triangolo equilatero</button>
+<button onclick="console_figure('cerchio')" id="c">Cerchio/circonferenza</button>
+<button onclick="console_figure('cubo')">Cubo</button></span><br>
+<div><input readonly="true" type="number"></div><br>
+<div><input readonly="true" placeholder="Area"></div><br>
+<input readonly="true" placeholder="Perimetro"><p hidden></p><br>
+<button hidden id="trum" onclick="calculate()">Calcola</button><br>
+<div id="Circle" hidden></div>
+<div hidden id="quadrato"></div>
+<div hidden id="rettangolo"></div>
+<div id="triangolo_isoscele" hidden></div>
+<div id="triangolo_rettangolo" hidden></div>
+<div hidden id="triangoloRettangoloIsoscele"></div>
+<div id="triangoloEquilatero" hidden></div>
+<div id="cubo"></div>
+<button id="formula" onclick="mostraFormule()">Mostra formule</button>
+<ol id="formule" hidden>
+    <li class="lp"><ul>Quadrato
+        <li>2p=lato×4</li>
+        <li>A=lato²</li></ul></li><li class="in">k</li>
+    <li class="lp"><ul>Rettangolo
+        <li>2p=(base+altezza)×2</li>
+        <li>A=base×altezza</li></ul></li><li class="in">h</li>
+    <li class="lp"><ul>Triangolo isoscele
+        <li>2p=lato obliquo×2+base</li>
+        <li>A=base×altezza÷2</li>
+        <li>Lato obliquo=√[(base÷2)²+altezza²]</ul></li><li class="in">#</li>
+    <li class="lp"><ul>Triangolo rettangolo
+        <li>2p=cateto1+cateto2+ipotenusa</li>
+        <li>A=(cateto1×cateto2)÷2</li>
+        <li>cateto2=√(ipotenusa²-cateto1²)</li></ul></li><li class="in">j</li>
+    <li class="lp"><ul>Triangolo rettangolo isoscele
+        <li>2p=cateto×2+base</li>
+        <li>A=cateto²÷2</li></ul></li><li class="in">n</li>
+    <li class="lp"><ul>Triangolo equilatero
+        <li>2p=lato×3</li>
+        <li>A=lato×altezza÷2</li></ul></li><li class="in">j</li>
+    <li class="lp"><ul>Cerchio/circonferenza
+        <li>cerchio=raggio²×π</li>
+        <li>circonferenza=raggio×2×π</li></ul></li><li class="in">k</li>
+        <li class="lp"><ul>Cubo
+            <li>Volume=spigolo³</li>
+            <li>Superficie totale=spigolo²×6</li>
+            <li>Area laterale=spigolo²×4</li>
+            <li>Area di base=spigolo²×2</li>
+            <li>Perimetro di base=spigolo×</li>
+        </ul></li>
+</ol>
+<script>
+premuto=false
+function mostraFormule(){
+    if(premuto!=true){
+        document.getElementById("formule").hidden=false
+        premuto=true
+    }
+    else{
+        document.getElementById("formule").hidden=true
+        premuto=false
+    }
+}
+lato=0
+base=0
+altezza=0
+raggio=0
+figura_=""
+latoIsoscele=0
+p=document.querySelector("p")
+input2=document.querySelectorAll("input")[0]
+input=document.querySelectorAll("input")[1]
+area=document.querySelectorAll("input")[2]
+perimetro=document.querySelectorAll("input")[3]
+buttonCALCOLO=document.getElementById("trum")
+function disable() {
+	document.querySelector("h2").remove()
+	document.getElementById("q").remove()
+    document.getElementById("r").remove()
+    document.getElementById("ti").remove()
+    document.getElementById("tr").remove()
+    document.getElementById("tri").remove()
+    document.getElementById("te").remove()
+    document.getElementById("c").remove()
+	buttonCALCOLO.hidden=false
+}
+function console_figure(figura) {
+	figura_=figura
+	disable()
+	input.readOnly=false
+	if(figura==="quadrato") {
+	input.placeholder="Inserisci lato"
+	input.addEventListener("input",()=>lato=parseFloat(input.value))
+	document.getElementById("quadrato").hidden=false
+	}
+	else if(figura==="cerchio") {
+	input.placeholder="Inserisci raggio"
+	area.placeholder="Cerchio"
+	perimetro.placeholder="Circonferenza"
+	input.addEventListener("input",()=>raggio=parseFloat(input.value))
+    document.getElementById("Circle").hidden=false
+	}
+    else{
+        input2.hidden=false
+        input2.readOnly=false
+        input.placeholder="Inserisici base"
+        if (figura==="rettangolo" || figura==="triangolo_isoscele"){
+            input.addEventListener("input",()=>base=parseFloat(input.value))
+            input2.addEventListener("input",()=>altezza=parseFloat(input2.value))
+            if(figura==="rettangolo"){
+                document.getElementById("rettangolo").hidden=false
+            }
+            if(figura==="triangolo_isoscele"){
+                document.getElementById("triangolo_isoscele").hidden=false
+            }
+        }
+        else if(figura==="triangolo_rettangolo" || figura_==="triangoloRettangoloIsoscele"){
+                input2.placeholder="Inserisci ipotenusa"
+                input.placeholder="Inserisci cateto"
+                input.addEventListener("input",()=>base=parseFloat(input.value))
+                input2.addEventListener("input",()=>altezza=parseFloat(input2.value))
+                if(figura==="triangolo_rettangolo"){
+                    document.getElementById("triangolo_rettangolo").hidden=false
+                }
+                if(figura==="triangoloRettangoloIsoscele"){
+                    document.getElementById("triangoloRettangoloIsoscele").hidden=false
+                    input2.placeholder="Inserisci ipotenusa(arrotonda ai centesimi)"
+                }
+        }
+        else if(figura==="triangoloEquilatero"){
+            input2.placeholder="Inserisci altezza"
+            input.placeholder="Inserisci lato"
+            input.addEventListener("input",()=>base=input.value)
+            input2.addEventListener("input",()=>altezza=input2.value)
+            document.getElementById("triangoloEquilatero").hidden=false
+        }
+    }
+}
+function calculate() {
+	if(figura_==="quadrato") {
+    area.value=`L'area misura ${lato**2} cm²`
+    perimetro.value=`Il perimetro misura ${lato*4} cm`
+	}
+	else if(figura_==="cerchio"){
+	    raggio=input.value
+	    area.value=`Il cerchio misura ${raggio**2*Math.PI}`
+	    perimetro.value=`La circonferenza misura ${raggio*2*Math.PI}`
+	}
+	if(figura_==="rettangolo"){
+	    area.value=`L'area misura ${base*altezza} cm²`
+	    perimetro.value=`Il perimetro misura ${base*2+altezza*2} cm`
+	}
+	else if(figura_==="triangolo_isoscele"){
+        area.value=`L'area misura ${base*altezza/2} cm²`
+	    latoObliquo=[altezza**2+(base/2)**2]**0.5
+	    perimetro.value=`Il perimetro misura ${latoObliquo*2+base} cm`
+	    p.innerHTML=`Il lato obliquo misura ${latoObliquo} cm`
+	    p.hidden=false
+	 }
+	 else if(figura_==="triangolo_rettangolo"){
+	     ipotenusa=parseFloat(altezza)
+	     cateto=parseFloat(base)
+	     cateto2=(ipotenusa*ipotenusa-cateto*cateto)**0.5
+	     if(isNaN(cateto2) || isTriangoloRettangolo(ipotenusa,cateto,cateto2)==false){
+	         p.innerHTML="Questi dati non possono formare un triangolo rettangolo"
+	     }
+	     else{
+	     area.value=`L'area misura ${cateto*cateto2/2} cm²`
+	     perimetro.value=`Il perimetro misura ${ipotenusa+cateto+cateto2} cm`
+	     p.innerHTML=`L'altro cateto misura ${cateto2} cm`
+	     }
+	     p.hidden=false
+	 }
+	 else if(figura_==="triangoloRettangoloIsoscele"){
+	     ipotenusa=parseFloat(altezza)
+	     cateto=parseFloat(base)
+	     cateto2=cateto
+	     if(isTriangoloRettangolo(ipotenusa,cateto,cateto2)==false){
+	         p.innerHTML="Inserisci numeri che possono formare un triangolo rettangolo isoscele"
+	         p.hidden=false
+	     }
+	     else{
+	     area.value=`L'area misura ${cateto**2/2} cm²`
+	     perimetro.value=`Il perimetro misura ${ipotenusa+cateto*2} cm`
+	     p.hidden=true
+	     }
+	}
+	else if(figura_==="triangoloEquilatero"){
+	        area.value=`L'area misura ${base*altezza/2} cm²`
+	        perimetro.value=`Il perimetro misura ${base*3} cm`
+	    }
+}
+function isTriangoloRettangolo(i,c,c2){
+    if(c==c2){
+        return i==(Math.round(Math.sqrt(2)*c*100))/100
+    }
+    else{
+    return i==(c**2+c2**2)**0.5 && c==(i**2-c2**2)**0.5 && c2==(i**2-c**2)**0.5
+    }
+}
+</script>
